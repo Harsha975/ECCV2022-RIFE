@@ -307,61 +307,14 @@ def process_data():
 
   return "Data processed successfully!"
 
-# def return_video():
+def save(input_folder):
+    command = f"ffmpeg -r 1 -i {input_folder}/%07d.png -vcodec libx264 -y /content/ECCV2022-RIFE/temp/output_video.mp4"
+    os.system(command)
+    return '/content/ECCV2022-RIFE/temp/output_video.mp4'
 
-#   # Replace with your input frames directory and output video filename
-#   input_frames_directory = "/content/ECCV2022-RIFE/vid_out/"
-#   output_video_filename = "output_video.mp4"
-
-#   # Get a list of all frame files in the input directory
-#   frame_files = sorted([f for f in os.listdir(input_frames_directory) if f.endswith('.png')])
-
-#   # Check if frame_files list is empty
-#   if not frame_files:
-#       print("No frame files found in the specified directory.")
-#       exit()
-
-#   # Get the height and width of the frames from the first frame
-#   frame = cv2.imread(os.path.join(input_frames_directory, frame_files[0]))
-#   frame_height, frame_width, _ = frame.shape
-
-#   # Define the codec and create a VideoWriter object with a lower frame rate (0.5 frames per second)
-#   fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can also use other codecs like 'XVID'
-#   out = cv2.VideoWriter(output_video_filename, fourcc, 3, (frame_width, frame_height))
-
-#   # Loop through frame files and write them to the video
-#   for frame_file in frame_files:
-#       frame_path = os.path.join(input_frames_directory, frame_file)
-#       frame = cv2.imread(frame_path)
-#       out.write(frame)
-
-#   # Release the VideoWriter and close the video file
-#   out.release()
-
-#   print("Video conversion complete.")
-#   return "done"
-
-
-def return_video():
-    input_frames_directory = "/content/ECCV2022-RIFE/vid_out/"
-    static_folder = "/content/ECCV2022-RIFE/temp/"  
-    output_video_filename = os.path.join(static_folder, "output_video.mp4")
-    frame_files = sorted([f for f in os.listdir(input_frames_directory) if f.endswith('.png')])
-
-    if not frame_files:
-        print("No frame files found in the specified directory.")
-        exit()
-    frame = cv2.imread(os.path.join(input_frames_directory, frame_files[0]))
-    frame_height, frame_width, _ = frame.shape
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
-    out = cv2.VideoWriter(output_video_filename, fourcc, 3, (frame_width, frame_height))
-    for frame_file in frame_files:
-        frame_path = os.path.join(input_frames_directory, frame_file)
-        frame = cv2.imread(frame_path)
-        out.write(frame)
-    out.release()
-    print("Video conversion complete.")
-    return "done"
+# Example usage
+input_folder = "/content/ECCV2022-RIFE/vid_out/"
+save(input_folder)
 
 import time
 upload_path = "/content/ECCV2022-RIFE/input/"
@@ -381,11 +334,8 @@ def process():
           file.save(filepath)
       if request.method == 'POST':
           result = process_data()
-      videoo=return_video()
-      print("hola")
-      # output_path = '/content/ECCV2022-RIFE/static/output_video.mp4'
-      # output_path = os.path.join(os.getcwd(), 'output_video.mp4')
-      output_path= f'/content/ECCV2022-RIFE/temp/output_video.mp4'
+      input_folder = "/content/ECCV2022-RIFE/vid_out/"
+      output_path=save(input_folder)
 
       video_path= get_data_url(output_path)
 
@@ -393,13 +343,10 @@ def process():
       return render_template('index.html',video_path=video_path)
 
 
-
 def get_data_url(video_path):
     video_bytes = open(video_path, 'rb').read()
     data_url = "data:video/mp4;base64," + b64encode(video_bytes).decode()
     return data_url
-
-
 
 if __name__ == '__main__':
     app.run()
