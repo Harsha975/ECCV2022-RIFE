@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    <title>Combined App</title>
+    <style>
+    body {
+        font-family: Montessa, sans-serif;
+        margin: 20px;
+        background: #000;
+        color: #fff;
+      }
+      .body {
+        display: flex;
+      }
+      input[type="file"] {
+        text-align: center;
+        padding: 5px;
+        margin: 30px 50px;
+
+      }
+      input[type="submit"] {
+        position: absolute;
+        margin: 20px ;
+        right: 50vw;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        border-radius: 20px;
+        align-items: center;
+        display: flex;
+      }
+      .container h1 {
+        text-align: center;
+        border: 2px solid rgb(255, 255, 255);
+        margin: 80px 400px;
+        padding: 20px 0px;
+        background: #403d3d;
+        border-radius: 26px;
+      }
+      .container form {
+        font-size: 26px;
+        width: 800px;
+        margin: 0 500px;
+      }
+      .Result{
+        margin: 20px 300px;
+      }
+      .Result h2{
+        text-align: center;
+        border: 2px solid rgb(255, 255, 255);
+        margin: 80px 10px;
+        padding: 20px 20px;
+        background: #403d3d;
+        border-radius: 26px;
+      }
+      .Result video{
+        border-radius: 20px;
+        margin: 0px 100px;
+      }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <h1><b>Vidiosyncracy</b></h1>
+    </div>
+    {% if video_path %}
+    <div class="Result">
+      <h2>Result video Display</h2>
+      <video width="640" height="480" controls>
+          <source src="{{ video_path }}" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+    </div>
+    {% else %}
+    <div class="container">
+    <h1>Upload Folder of Frames</h1>
+    <form action="/upload_folder" method="post" enctype="multipart/form-data">
+        <label for="folder"><b>Select Folder </b></label>
+        <input type="file" name="folder" webkitdirectory directory multiple required id="folder">
+        <input type="submit" value="Upload Folder">
+    </form>
+    </div>
+    {% endif %}
+</body>
+</html>
