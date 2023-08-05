@@ -308,7 +308,8 @@ def process_data():
   return "Data processed successfully!"
 
 def save(input_folder):
-    command = f"ffmpeg -r 1 -i {input_folder}/%07d.png -vcodec libx264 -y /content/ECCV2022-RIFE/temp/output_video.mp4"
+    frame_rate = 10
+    command = f"ffmpeg -r {frame_rate} -i {input_folder}/%07d.png -vcodec libx264 -y /content/ECCV2022-RIFE/temp/output_video.mp4"
     os.system(command)
     return '/content/ECCV2022-RIFE/temp/output_video.mp4'
 
